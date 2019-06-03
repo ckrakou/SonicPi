@@ -1,12 +1,12 @@
-use_bpm 110
+use_bpm 120
 
 # Thundering Drums
 live_loop :drums do
-  with_fx :distortion, pre_amp: 0.3, distort: 0.5 do
+  with_fx :distortion, distort: 0.7, pre_amp: 0.5 do
     with_fx :reverb, damp: 1 do
       64.times do
-        sample :bd_tek, rate: 0.5 ,amp: 1 if (spread 5,8).tick
-        sample :elec_snare, rate: 0.5, amp: 1 if (spread 9,16).rotate(4).look
+        sample :bd_tek, amp: 1, rate: 0.5 if (spread 5,16).tick
+        sample :elec_snare, amp: 1, rate: 0.5 if (spread 5,16).look
         sleep 0.25
       end
     end
@@ -15,15 +15,21 @@ end
 
 # DOOM-ish bassline
 live_loop :bassline do
-  with_fx :reverb, damp: 1 do
-    with_fx :nrlpf, cutoff: 80, res: 0.7 do
-      8.times do
-        notes = (ring :c2, :d2, :e2).choose
-        8.times do
-          synth :prophet, note: notes, release: 0.125, sustain: 0.125, attack: 0.125 if (spread 9,16).tick
-          sleep 0.25
-        end
-      end
+  sus = (ring 0.5,1,2,3,5).choose
+  with_fx :octaver do
+    synth :dsaw,amp: 1, note: (chord :f2, :min).tick, sustain: sus, release: 0.125, attack: 0.125, detune: -0.2
+    sleep sus
+  end
+end
+
+# metallic synth melody. Normalized filters to taste.
+live_loop :melody do
+  chords = (ring :f4, :g4, :e4).choose
+  use_random_seed 2
+  with_fx :echo do
+    32.times do
+      synth :chiplead, note: (chord chords, :min, num_octaves: 3).choose
+      sleep 0.5
     end
   end
 end
