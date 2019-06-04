@@ -3,7 +3,7 @@ use_bpm 120
 # Thundering Drums
 live_loop :drums do
   with_fx :distortion, distort: 0.7, pre_amp: 0.5 do
-    with_fx :reverb, damp: 1 do
+    with_fx :reverb, room: 1, damp: 1 do
       64.times do
         sample :bd_tek, amp: 1, rate: 0.5 if (spread 5,16).tick
         sample :elec_snare, amp: 1, rate: 0.5 if (spread 5,16).look
