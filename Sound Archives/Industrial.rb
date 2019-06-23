@@ -46,3 +46,17 @@ live_loop :bassline do
     end
   end
 end
+
+# root is for moving across scales. Season to taste. Any random seed will do.
+# If you don't use one, make the roots more distincy
+# rpitch set to minor_pentatonic scale
+live_loop :snappyTranceLead do
+  root = (ring 0,1,0,-1).tick
+  use_random_seed 2116
+  with_fx :ixi_techno do
+    32.times do
+      sample :bass_trance_c, rpitch: (ring 0,3,5,7,10,12).choose + root, slice: 0
+      sleep 0.5
+    end
+  end
+end
