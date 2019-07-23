@@ -158,7 +158,7 @@ end
 # Adding effects like this can be really taxing on your computer
 # so be careful. You might want to separate your sounds into several loops.
 live_loop :final do
-  stop
+  #stop
   kicks = (ring 5,7,9).choose # These are our kicks
   cymbals = (ring 9,11,13).choose # These are our cymbals
   bass_pitch = (scale 0, :minor).choose # Our bass pitch
@@ -170,8 +170,10 @@ live_loop :final do
     cut = line(70,110,steps: 32, inclusive: true).mirror.look
     
     # Soften up the sound a bit with a band pass filter
+    # We'll loop through a chord as well instead of just playing the lead note
+    # Just to keep things interesting. The lead note becomes the root of our chord.
     with_fx :bpf, centre: lead_notes, amp: 1.2 do
-      synth :supersaw, amp: 0.8, note: lead_notes, cutoff: cut
+      synth :supersaw, amp: 0.8, note: (chord lead_notes, :minor).look, cutoff: cut
     end
     
     # Add a bit of punch to the drums
