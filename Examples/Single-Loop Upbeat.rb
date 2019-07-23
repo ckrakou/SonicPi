@@ -19,8 +19,8 @@ live_loop :main2 do
     tick
     
     # this is our bass drum rythm. we'll do 7 hits over 16 steps.
-    # to say it in a way that is a bit easier to read, our rythm is: "*__*_*_*_*__*_*_*_"
-    kick_rythm = (ring true, false, false, true, false, true, false, true, false, false, true, false ,true, false, true, false)
+    # to say it in a way that is a bit easier to read, our rythm is: "*__*_*_*__*_*_*_"
+    kick_rythm = (ring true, false, false, true, false, true, false, true, false, false, true, false, true, false, true, false)
     
     if kick_rythm.look == true then
       sample :bd_tek if (spread 7, 16).look
