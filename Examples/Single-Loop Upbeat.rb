@@ -1,6 +1,5 @@
 use_bpm 120
 
-puts (spread 7,16)
 # Core Structure. This is the basis for our loops
 # If you have more than one loop, make sure to synchronize them
 live_loop :main do
@@ -19,16 +18,25 @@ live_loop :main2 do
   64.times do
     tick
     
-    # This spreads out 7 hits evenly across 16 steps, as a ring of true and false
-    # like this: (true, false, false, true, false, true, false, true, false, false, true, false ,true, false, true, false)
-    # Or a bit easier to read: "*__*_*_*_*__*_*_*_"
-    if (spread 7,16).look == true then
+    # this is our bass drum rythm. we'll do 7 hits over 16 steps.
+    # to say it in a way that is a bit easier to read, our rythm is: "*__*_*_*_*__*_*_*_"
+    kick_rythm = (ring true, false, false, true, false, true, false, true, false, false, true, false ,true, false, true, false)
+    
+    if kick_rythm.look == true then
       sample :bd_tek if (spread 7, 16).look
     end
     
-    # Adding the if-statement to the end does the same thing as above
+    
+    # We can use the spread function to generate this list for us
+    # This gives us 2 hits spread evenly over 16 hits, and rotates the list 4 times
+    # giving us this: ____*_______*___
+    # Since it's short and concise, we'll put it straight in the "if" statement
+    if (spread 2,16).rotate(4).look then
+      sample :elec_snare
+    end
+    
+    # Adding the if-statement to the end does the same thing as the normal "if" structure
     # We'll use the short form for the rest of the example. It's faster to write out.
-    sample :elec_snare if (spread 2,16).rotate(4).look
     sample :drum_cymbal_closed if (spread 9,16).rotate(2).look
     sleep 0.25
   end
@@ -41,6 +49,7 @@ live_loop :main3 do
   kicks = (ring 5,7,9).choose # get our kicks
   cymbals = (ring 9,11,13).choose # Generate cymbal rythms
   
+  # let's vary the number of iterations, to make it extra snappy
   (ring 16,32,64).choose.times do
     tick
     sample :bd_tek if (spread kicks,16).look
@@ -56,7 +65,7 @@ live_loop :main4 do
   stop
   kicks = (ring 5,7,9).choose # get our kicks
   cymbals = (ring 9,11,13).choose # Generate cymbal rythms
-  bass_pitch = (scale :c0, :minor).choose - 12   # Adjusted to account for the pitch of the bass sample
+  bass_pitch = (scale :c0, :minor).choose - 12   # let's change up the pitch of the bass.
   
   (ring 16,32,64).choose.times do
     tick
@@ -84,7 +93,7 @@ live_loop :main5 do
     sample :bd_tek if (spread kicks,16).look
     
     # Filter out the high frequencies on our snare.
-    sample :elec_snare, lpf: 80 if (spread 2,16).rotate(4).look
+    sample :elec_snare, lpf: 90 if (spread 2,16).rotate(4).look
     
     # Filter out the low frequencies on our cymbals.
     sample :drum_cymbal_closed, hpf: 45 if (spread cymbals,16).rotate(2).look
@@ -111,11 +120,11 @@ live_loop :main6 do
     
     # Our lead plays the same note, and the changing cutoff keeps it
     # nice and interesting. You could iterate through chords instead
-    synth :supersaw, amp: 1, note: lead_root.look, cutoff: cut
+    synth :supersaw, amp: 0.8, note: lead_root.look, cutoff: cut
     
     
     sample :bd_tek if (spread kicks,16).look
-    sample :elec_snare, lpf: 80 if (spread 2,16).rotate(4).look
+    sample :elec_snare, lpf: 90 if (spread 2,16).rotate(4).look
     sample :drum_cymbal_closed, hpf: 45 if (spread cymbals,16).rotate(2).look
     sample :bass_trance_c, amp: 0.9, rpitch: bass_pitch if (spread 1,16).look
     sleep 0.25
@@ -140,13 +149,13 @@ live_loop :final do
     
     # Soften up the sound
     with_fx :bpf, centre: lead_notes[2] do
-      synth :supersaw, amp: 1, note: lead_notes.look, cutoff: cut
+      synth :supersaw, amp: 0.8, note: lead_notes.look, cutoff: cut
     end
     
     # Add a bit of punch to the drums
     with_fx :reverb, room: 1, damp: 1 do
       sample :bd_tek if (spread kicks,16).look
-      sample :elec_snare, lpf: 80 if (spread 2,16).rotate(4).look
+      sample :elec_snare, lpf: 90 if (spread 2,16).rotate(4).look
       sample :drum_cymbal_closed, hpf: 45 if (spread cymbals,16).rotate(2).look
     end
     
