@@ -138,7 +138,8 @@ live_loop :main6 do
   (ring 16,32,64).choose.times do
     tick
     
-    # Poor mans LFO.
+    # Poor mans LFO. This is how we cycle through the cutoff
+    # This gives the sound a whooshing effect.
     cut = line(70,110,steps: 32, inclusive: true).mirror.look
     
     # Our lead plays the same note, and the changing cutoff keeps it
@@ -166,6 +167,7 @@ live_loop :final do
   
   (ring 16,32,64).choose.times do
     tick
+    
     # Poor mans LFO.
     cut = line(70,110,steps: 32, inclusive: true).mirror.look
     
