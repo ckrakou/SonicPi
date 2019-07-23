@@ -1,5 +1,6 @@
 use_bpm 120
 
+puts (spread 7,16)
 # Core Structure. This is the basis for our loops
 # If you have more than one loop, make sure to synchronize them
 live_loop :main do
@@ -17,7 +18,16 @@ live_loop :main2 do
   stop
   64.times do
     tick
-    sample :bd_tek if (spread 7, 16).look
+    
+    # This spreads out 7 hits evenly across 16 steps, as a ring of true and false
+    # like this: (true, false, false, true, false, true, false, true, false, false, true, false ,true, false, true, false)
+    # Or a bit easier to read: "*__*_*_*_*__*_*_*_"
+    if (spread 7,16).look == true then
+      sample :bd_tek if (spread 7, 16).look
+    end
+    
+    # Adding the if-statement to the end does the same thing as above
+    # We'll use the short form for the rest of the example. It's faster to write out.
     sample :elec_snare if (spread 2,16).rotate(4).look
     sample :drum_cymbal_closed if (spread 9,16).rotate(2).look
     sleep 0.25
