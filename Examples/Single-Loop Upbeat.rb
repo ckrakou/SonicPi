@@ -11,23 +11,24 @@ live_loop :main do
   end
 end
 
-# Let's make some rhythms for our samples
-# We'll use the euclidean algorithm to quickly create some rhythms
+# Let's make some rhythms for our samples, using lists of true/false values
+# We'll use the spread function to quickly create rhythms once we understand how it works
 live_loop :main2 do
   stop
   64.times do
     tick
     
     # this is our bass drum rythm. we'll do 7 hits over 16 steps.
-    # to say it in a way that is a bit easier to read, our rythm is: "*__*_*_*__*_*_*_"
+    # to say it in a way that is a bit easier to read, our rythm is: [X--X-X-X--X-X-X-]
     kick_rhythm = (ring true, false, false, true, false, true, false, true, false, false, true, false, true, false, true, false)
     
+    # once we have the list, we can cycle through it
     if kick_rhythm.look == true then
       sample :bd_tek
     end
     
     # Let's save our snare pattern, which is 2 hits evenly spread over 16 steps
-    # giving us this: *_______*_______
+    # giving us this: [X-------X-------]
     snare_rhythm = (ring true,false,false,false,false,false,false,false,true,false,false,false,false,false,false,false)
     
     
@@ -43,7 +44,7 @@ live_loop :main2 do
     # We can also shift our rhytms by adding .rotate() at the end of the spread function
     # imagine it as taking the last element and putting it in the front of the list
     # the number in the parenthesis is how many times it does this.
-    # This one gives us the following pattern: *_*_*_**_*_*_**_
+    # This one gives us the following pattern: [X-X-X-XX-X-X-XX-]
     cymbal_rhythm = (spread 9,16).rotate(2)
     
     # Adding the if-statement to the end works the same as the normal "if" structure
@@ -81,7 +82,7 @@ live_loop :main4 do
   kicks = (ring 5,7,9).choose # These are our kicks
   cymbals = (ring 9,11,13).choose # These are our cymbals
   
-  # We'll use a scale to generate our bass pitches
+  # We'll use a scale to generate our bass pitches. It's a list of notes.
   # We could use a chord if we wanted to. Just make sure to start at 0
   bass_pitch = (scale 0, :minor).choose
   
@@ -159,7 +160,7 @@ end
 # Adding effects like this can be really taxing on your computer
 # so be careful. You might want to separate your sounds into several loops.
 live_loop :final do
-  #stop
+  stop
   kicks = (ring 5,7,9).choose # These are our kicks
   cymbals = (ring 9,11,13).choose # These are our cymbals
   bass_pitch = (scale 0, :minor).choose # Our bass pitch
