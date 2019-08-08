@@ -85,9 +85,7 @@ live_loop :flanges do
       tick
       
       
-      # Not too sure about this one.
-      #  synth :chiplead, note: (chord :c3, :minor), amp: 1.3, sustain: 0.125 if (spread 9,16).look
-      
+     
       # Works as a pair
       synth :chipbass, amp: 0.7, note: (scale :c3, :minor).choose, release: 0.25
       synth :fm, amp: 0.8, note: (chord :c3, :minor).choose, sustain: 4 if (spread 1,16).look
